@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "1768754035562"
+  },
+  {
+    "id": "1768754075334",
+    "name": "Add your name in the body"
+  },
+  {
+    "id": "1768754203417",
+    "title": "Mate",
+    "description": "Mate de madera",
+    "code": "MAT01",
+    "price": 5000,
+    "status": true,
+    "stock": 10,
+    "category": "bebidas",
+    "thumbnails": []
+  }
+]
