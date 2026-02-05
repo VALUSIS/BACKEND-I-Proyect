@@ -1,12 +1,5 @@
 [
   {
-    "id": "1768754035562"
-  },
-  {
-    "id": "1768754075334",
-    "name": "Add your name in the body"
-  },
-  {
     "id": "1768754203417",
     "title": "Mate",
     "description": "Mate de madera",
@@ -16,5 +9,15 @@
     "stock": 10,
     "category": "bebidas",
     "thumbnails": []
+  },
+  {
+    "id": "1770325862845",
+    "title": "Yerba",
+    "price": "130.000"
+  },
+  {
+    "id": "1770325875026",
+    "title": "Ps5",
+    "price": "800.000"
   }
 ]
