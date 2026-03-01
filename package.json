@@ -11,8 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^4.22.1",
     "express-handlebars": "^8.0.5",
+    "mongoose": "^9.2.3",
+    "mongoose-paginate-v2": "^1.9.1",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {

@@ -1,6 +1,8 @@
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -8,8 +10,15 @@ import viewsRouter from "./routes/views.router.js";
 
 import ProductManager from "./managers/ProductManager.js";
 
+dotenv.config();
+
+
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("Mongo conectado"))
+  .catch(err => console.log(err));
 
 
 app.use(express.json());
