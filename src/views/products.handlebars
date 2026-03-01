@@ -15,10 +15,19 @@
   </div>
 {{/each}}
 
+<div>
+  {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}">Anterior</a>
+  {{/if}}
+
+  {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}">Siguiente</a>
+  {{/if}}
+</div>
+
 <script>
   async function addToCart(productId) {
     let cartId = localStorage.getItem("cartId");
-
 
     if (!cartId) {
       const response = await fetch("/api/carts", {
@@ -31,10 +40,9 @@
       localStorage.setItem("cartId", cartId);
     }
 
-  
-    await fetch(`/api/carts/${cartId}/product/${productId}`, {
-      method: "POST"
-    });
+    await fetch(`/api/carts/${cartId}/products/${productId}`, {
+  method: "POST"
+});
 
     alert("Producto agregado al carrito");
   }
