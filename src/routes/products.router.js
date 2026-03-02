@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
 
     const filter = {};
 
-   
+    
     if (query) {
       if (query === "true" || query === "false") {
         filter.status = query === "true";
@@ -21,7 +21,8 @@ router.get("/", async (req, res) => {
 
     const options = {
       limit: parseInt(limit),
-      page: parseInt(page)
+      page: parseInt(page),
+      lean: true 
     };
 
     if (sort) {
@@ -44,7 +45,7 @@ router.get("/", async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ status: "error", message: error.message });
   }
 });
 

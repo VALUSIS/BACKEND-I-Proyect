@@ -1,0 +1,21 @@
+<nav>
+  <a href="/products">Productos</a> |
+  <a href="#" id="cartLink">Mi Carrito</a>
+</nav>
+<hr>
+
+<script>
+  const cartLink = document.getElementById("cartLink");
+  let cartId = localStorage.getItem("cartId");
+
+  if (cartId) {
+    cartLink.href = "/carts/" + cartId;
+  } else {
+    fetch("/api/carts", { method: "POST" })
+      .then(res => res.json())
+      .then(data => {
+        localStorage.setItem("cartId", data._id);
+        cartLink.href = "/carts/" + data._id;
+      });
+  }
+</script>

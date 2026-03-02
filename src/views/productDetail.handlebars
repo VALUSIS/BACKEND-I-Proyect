@@ -1,0 +1,31 @@
+{{> navbar }}
+
+<h1>Detalle del Producto</h1>
+
+<h2>{{product.title}}</h2>
+<p>Precio: ${{product.price}}</p>
+<p>Categoria: {{product.category}}</p>
+<p>Stock: {{product.stock}}</p>
+<p>Disponible: {{product.status}}</p>
+
+
+<button id="addBtn">Agregar al carrito</button>
+
+<a href="/products">Volver</a>
+
+<script>
+const btn = document.getElementById("addBtn");
+btn.addEventListener("click", async () => {
+  let cartId = localStorage.getItem("cartId");
+
+  if (!cartId) {
+    const res = await fetch("/api/carts", { method: "POST" });
+    const newCart = await res.json();
+    cartId = newCart._id;
+    localStorage.setItem("cartId", cartId);
+  }
+
+  await fetch(`/api/carts/${cartId}/products/{{product._id}}`, { method: "POST" });
+  alert("Producto agregado al carrito");
+});
+</script>
