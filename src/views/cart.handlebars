@@ -8,6 +8,29 @@
     <p>Cantidad: {{this.quantity}}</p>
     <hr>
   </div>
+  <button onclick="deleteProduct('{{../cart._id}}', '{{this.product._id}}')">
+  Eliminar
+</button>
 {{/each}}
 
 <a href="/products">Volver a productos</a>
+
+<button onclick="clearCart('{{cart._id}}')">
+  Vaciar carrito
+</button>
+
+<script>
+  async function deleteProduct(cid, pid) {
+    await fetch(`/api/carts/${cid}/products/${pid}`, {
+      method: "DELETE"
+    });
+    location.reload();
+  }
+
+  async function clearCart(cid) {
+    await fetch(`/api/carts/${cid}`, {
+      method: "DELETE"
+    });
+    location.reload();
+  }
+</script>

@@ -9,29 +9,54 @@ router.get("/", (req, res) => {
   res.redirect("/products");
 });
 
-
 router.get("/products", async (req, res) => {
   try {
-    const { page = 1 } = req.query;
+    const { limit = 10, page = 1, sort, category, stock } = req.query;
 
-    const result = await Product.paginate(
-      {},
-      { page: parseInt(page), limit: 5, lean: true }
-    );
+    let filter = {};
+
+    
+    if (category && category.trim() !== "") {
+      filter.category = {
+        $regex: `^${category.trim()}$`,
+        $options: "i"
+      };
+    }
+
+
+    if (stock === "true") {
+      filter.stock = { $gt: 0 };
+    }
+
+    let options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      lean: true
+    };
+
+
+    if (sort) {
+      options.sort = { price: sort === "asc" ? 1 : -1 };
+    }
+
+    const result = await Product.paginate(filter, options);
 
     res.render("products", {
       products: result.docs,
       hasPrevPage: result.hasPrevPage,
       hasNextPage: result.hasNextPage,
       prevPage: result.prevPage,
-      nextPage: result.nextPage
+      nextPage: result.nextPage,
+      totalPages: result.totalPages,
+      page: result.page
     });
+
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-// ✅ Detalle de producto
+
 router.get("/products/:pid", async (req, res) => {
   try {
     const product = await Product.findById(req.params.pid).lean();

@@ -1,8 +1,6 @@
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -10,8 +8,13 @@ import viewsRouter from "./routes/views.router.js";
 
 import ProductManager from "./managers/ProductManager.js";
 
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
+
+import dotenv from "dotenv";
 dotenv.config();
 
+import mongoose from "mongoose";
 
 const app = express();
 const PORT = process.env.PORT || 8080;

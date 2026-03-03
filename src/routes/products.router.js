@@ -1,51 +1,59 @@
 import { Router } from "express";
 import Product from "../models/Product.model.js";
-
+console.log("Products router cargado");
 const router = Router();
 
 
 router.get("/", async (req, res) => {
   try {
-    const { limit = 10, page = 1, sort, query } = req.query;
+    const { category, stock, sort, page = 1, limit = 5 } = req.query;
 
-    const filter = {};
+    let filter = {};
+console.log("Category recibida:", category);
+console.log("Filtro final:", filter);
+ 
+    if (category && category.trim() !== "") {
+  filter.category = {
+    $regex: `^${category.trim()}$`,
+    $options: "i"
+  };
+}
+   
+    if (stock === "true") {
+      filter.stock = { $gt: 0 };
+    }
+
+    let query = Product.find(filter);
 
     
-    if (query) {
-      if (query === "true" || query === "false") {
-        filter.status = query === "true";
-      } else {
-        filter.category = query;
-      }
+    if (sort === "asc") {
+      query = query.sort({ price: 1 });
     }
 
-    const options = {
-      limit: parseInt(limit),
-      page: parseInt(page),
-      lean: true 
-    };
-
-    if (sort) {
-      options.sort = { price: sort === "asc" ? 1 : -1 };
+    if (sort === "desc") {
+      query = query.sort({ price: -1 });
     }
 
-    const result = await Product.paginate(filter, options);
+    const products = await query
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .lean();
 
-    res.json({
-      status: "success",
-      payload: result.docs,
-      totalPages: result.totalPages,
-      prevPage: result.prevPage,
-      nextPage: result.nextPage,
-      page: result.page,
-      hasPrevPage: result.hasPrevPage,
-      hasNextPage: result.hasNextPage,
-      prevLink: result.hasPrevPage ? `?page=${result.prevPage}` : null,
-      nextLink: result.hasNextPage ? `?page=${result.nextPage}` : null
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    res.render("products", {
+      products,
+      page: Number(page),
+      totalPages,
+      hasPrevPage: page > 1,
+      hasNextPage: page < totalPages,
+      prevPage: Number(page) - 1,
+      nextPage: Number(page) + 1
     });
 
   } catch (error) {
-    res.status(500).json({ status: "error", message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 

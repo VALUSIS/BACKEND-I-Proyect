@@ -1,5 +1,32 @@
 {{> navbar }}
 
+<h3>Filtrar productos</h3>
+
+<form method="GET" action="/products">
+  <label>Categoría:</label>
+  <label>Categoría:</label>
+<select name="category">
+  <option value="">Todas</option>
+  <option value="infusiones">Infusiones</option>
+  <option value="accesorios">Accesorios</option>
+  <option value="yerba">Yerba</option>
+</select>
+
+  <label>Solo con stock:</label>
+  <input type="checkbox" name="stock" value="true">
+
+  <label>Ordenar por precio:</label>
+  <select name="sort">
+    <option value="">Sin ordenar</option>
+    <option value="asc">Menor a mayor</option>
+    <option value="desc">Mayor a menor</option>
+  </select>
+
+  <button type="submit">Aplicar filtros</button>
+</form>
+
+<hr>
+
 <h1>Lista de Productos</h1>
 
 {{#each products}}
@@ -45,3 +72,17 @@ async function addToCart(productId) {
   alert("Producto agregado al carrito");
 }
 </script>
+
+<hr>
+
+<div>
+  {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}">⬅ Anterior</a>
+  {{/if}}
+
+  Página {{page}} de {{totalPages}}
+
+  {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}">Siguiente ➡</a>
+  {{/if}}
+</div>
